@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from gestion_projet.models import Project, Contributor, Issue, Comment
 
-from gestion_projet.serializers import ProjectSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
+from gestion_projet.serializers import ProjectListSerializer, ProjectDetailsSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
 
 
 
@@ -13,10 +13,16 @@ from gestion_projet.serializers import ProjectSerializer, ContributorSerializer,
 # Create your views here.
 
 class ProjectViewSet(ModelViewSet):
-    serializer_class = ProjectSerializer
+    serializer_class = ProjectListSerializer
+    detail_serializer_class = ProjectDetailsSerializer
 
     def get_queryset(self):
         return Project.objects.all()
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return self.detail_serializer_class
+        return super().get_serializer_class()
     
 class ContributorViewSet(ModelViewSet):
     serializer_class = ContributorSerializer

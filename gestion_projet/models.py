@@ -24,7 +24,7 @@ class Contributor(models.Model):
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='contributors_details')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     def __str__(self):
@@ -54,7 +54,7 @@ class Issue(models.Model):
 
     title = models.CharField(max_length=255)
     description = models.TextField()
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='issues')
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='issues_details')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='issues_created')
     assignee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='issues_assigned')
     tag = models.CharField(max_length=20, choices=TAG_CHOICES)
@@ -68,5 +68,5 @@ class Comment(models.Model):
     text = models.CharField(max_length=1000)
     date = models.DateTimeField(auto_now_add=True)
 
-    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, related_name='comment_details')
     author = models.ForeignKey(Contributor, on_delete=models.CASCADE, null=True )
