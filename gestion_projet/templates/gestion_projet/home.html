@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - API de gestion de projets{% endblock %}
+{% block content %}
+<section class="home-container">
+    <h1>Bienvenue sur la page principale de l'API de gestion de projets</h1>
+    <p>Utilisez les points de terminaison API pour gérer vos projets, contributeurs, issues et commentaires.</p>
+    <ul>
+        <li><a href="{% url 'project-list' %}">Projets</a></li>
+        <li><a href="{% url 'my-projects-list' %}">Mes projets</a></li>
+    </ul>
+</section>
+{% endblock %}

@@ -1,17 +1,28 @@
 from django.db import models
 from django.conf import settings
 
+from authenticate.models import User
+
 class Project(models.Model):
     name = models.CharField(max_length=255)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     description = models.TextField()
     contributors = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through='Contributor',
         related_name='projects'
     )
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
+    
+    def finish_project(self):
+        if self.active == False:
+            return
+        self.active = False
+        self.save()
+    
 
 
 class Contributor(models.Model):

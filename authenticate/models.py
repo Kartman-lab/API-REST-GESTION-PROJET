@@ -3,6 +3,12 @@ from django.db import models
 
 class User(AbstractUser):
     # tes champs supplémentaires ici
+    age = models.PositiveBigIntegerField(default=0)
+    can_be_contacted = models.BooleanField(default=False)
+    can_data_be_shared = models.BooleanField(default=False)
+
+    def has_valid_consent(self):
+        return self.age >= 15 and self.can_data_be_shared
 
     groups = models.ManyToManyField(
         Group,

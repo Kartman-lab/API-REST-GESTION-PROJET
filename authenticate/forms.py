@@ -11,4 +11,5 @@ class LoginForm(forms.Form):
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
-        fields = ('username', , 'email', 'first_name', 'last_name', 'age')
+        fields = ('username', 'email', 'first_name', 'last_name', 
+                  'age', 'can_data_be_shared', 'can_be_contacted')

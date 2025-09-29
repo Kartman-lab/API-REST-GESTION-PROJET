@@ -23,8 +23,8 @@ def run():
     u3 = User.objects.create_user(username="paul", password="test123")
 
     # --- Création de projets ---
-    p1 = Project.objects.create(name="Projet Django", description="API de gestion de projet")
-    p2 = Project.objects.create(name="Application Mobile", description="Développement d'une app mobile React Native")
+    p1 = Project.objects.create(name="Projet Django", author=u1, description="API de gestion de projet")
+    p2 = Project.objects.create(name="Application Mobile", author=u3, description="Développement d'une app mobile React Native")
 
     # --- Associer contributeurs ---
     c1 = Contributor.objects.create(user=u1, project=p1, role="author")

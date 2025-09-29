@@ -8,6 +8,8 @@ class CommentSerializer(ModelSerializer):
         model = Comment
         fields = '__all__'
 
+        def create(self, validated_data):
+            pass
 
 class ContributorSerializer(ModelSerializer):
     class Meta: 
@@ -21,6 +23,18 @@ class IssueSerializer(ModelSerializer):
     class Meta:
         model = Issue
         fields = '__all__'
+        read_only_fields = ['author', 'project']
+
+        def create(self, validated_data):
+            user = self.context['request'].user
+            project = self.context.get('project')
+
+            return Issue.object.create(
+                author=user,
+                project=project,
+                **validated_data
+            )
+
 
 class ProjectListSerializer(ModelSerializer):
     class Meta:
