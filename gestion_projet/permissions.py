@@ -6,6 +6,10 @@ class IsAuthorOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
+        
+        if view.action == 'create':
+             return True
+        
         return obj.author == request.user 
 
 class IsCollaboratorOrReadOnly(BasePermission):
@@ -14,7 +18,7 @@ class IsCollaboratorOrReadOnly(BasePermission):
             if request.method in SAFE_METHODS:
                 return True
             
-            if view.action in ["create", "list", "retrieve"]:
+            if view.action == "create":
                 return True
         
             project_id = request.data.get("project")

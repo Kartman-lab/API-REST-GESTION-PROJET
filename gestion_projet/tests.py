@@ -12,18 +12,15 @@ User = get_user_model()
 
 class ProjectPermissionTests(APITestCase):
     def setUp(self):
-        # Utilisateurs
         self.author = User.objects.create_user(username='author', password='pass123')
         self.other = User.objects.create_user(username='other', password='pass123')
         self.admin = User.objects.create_superuser(username='admin', password='pass123')
 
-        # Projet
+
         self.project = Project.objects.create(name='Test Project', author=self.author)
 
-        # Factory pour tests unitaires de permission
         self.factory = APIRequestFactory()
 
-    # ---------- Tests unitaires de la permission ----------
     def test_permission_non_athenticated_user(self):
          request = self.factory.put(f'/projects/{self.project.id}/', {}, format='json')
          request.user = None 
