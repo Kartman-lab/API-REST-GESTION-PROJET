@@ -16,7 +16,7 @@ from gestion_projet.permissions import IsAuthorOrReadOnly, IsCollaboratorOrReadO
 class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectListSerializer
     detail_serializer_class = ProjectDetailsSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsCollaboratorOrReadOnly]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         return Project.objects.all()

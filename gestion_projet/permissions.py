@@ -3,12 +3,16 @@ from gestion_projet.models import Project, Contributor, Issue, Comment
 
 class IsAuthorOrReadOnly(BasePermission):
     message = "Vous devez être l'auteur du projet pour effectuer cette action."
+    def has_permisison(self, request, view):
+         if view.action == "create":
+              return True
+         
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
         
-        if view.action == 'create':
-             return True
+        if view.action == "finish_project":
+            return obj.author == request.user
         
         return obj.author == request.user 
 
@@ -18,9 +22,6 @@ class IsCollaboratorOrReadOnly(BasePermission):
             if request.method in SAFE_METHODS:
                 return True
             
-            if view.action == "create":
-                return True
-        
             project_id = request.data.get("project")
             if not project_id:
                 return False
