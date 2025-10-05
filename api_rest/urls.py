@@ -16,28 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
-from rest_framework_nested import routers
-from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework import routers as drf_routers
+from rest_framework_nested import routers as nested_routers
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from gestion_projet import views
 import authenticate.views
 import gestion_projet.views
 
-router = routers.SimpleRouter()
+
+router = drf_routers.SimpleRouter()
 router.register('project', views.ProjectViewSet, basename='project')
-router.register('My-projects/', views.MyProjectsViewSet, basename='my-projects')
+router.register('My-projects', views.MyProjectsViewSet, basename='my-projects')
+
 # Nested router pour les projets
-projects_router = routers.NestedSimpleRouter(router, 'project', lookup='project')
+projects_router = nested_routers.NestedSimpleRouter(router, 'project', lookup='project')
 projects_router.register('contributors', views.ContributorViewSet, basename='project-contributors')
 projects_router.register('issue', views.IssueViewSet, basename='project-issue')
 
-# Nested router pour les commentaires, parent = 'issue' (nom de route enregistré dans projects_router)
-issues_router = routers.NestedSimpleRouter(projects_router, 'issue', lookup='issue')
+# Nested router pour les commentaires
+issues_router = nested_routers.NestedSimpleRouter(projects_router, 'issue', lookup='issue')
 issues_router.register('comments', views.CommentViewSet, basename='issue-comments')
 
 urlpatterns = [

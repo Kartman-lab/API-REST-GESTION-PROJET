@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from gestion_projet.models import Project, Contributor, Issue, Comment
 from gestion_projet.serializers import ProjectListSerializer, ProjectDetailsSerializer, ContributorSerializer, IssueSerializer, CommentSerializer
-from gestion_projet.permissions import IsAuthorOrReadOnly, IsCollaboratorOrReadOnly
+from gestion_projet.permissions import IsAuthorOrReadOnly, IsCollaboratorOrReadOnly, ReadOnlyIfCollaborator
 
 
 # Create your views here.
@@ -20,6 +20,13 @@ class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Project.objects.all()
+    
+    def perform_create(self, serializer):
+        project = serializer.save(author=self.request.user)
+        Contributor.objects.create(
+            user=self.request.user,
+            project=project,role="author"
+        )
     
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -68,7 +75,7 @@ class IssueViewSet(ModelViewSet):
     
 class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsCollaboratorOrReadOnly]
+    permission_classes = [IsAuthenticated, ReadOnlyIfCollaborator]
 
     def get_queryset(self):
         issue_id = self.kwargs.get('issue_pk')

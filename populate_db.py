@@ -61,5 +61,30 @@ def run():
     print("✅ Base de données remplie avec succès !")
 
 
+def create_new_project():
+    u1 = User.objects.filter(user_id='5')
+    u2 = User.objects.filer(user_id="2")
+
+
+    p1 = Project.objects.create(name="Projet API", author=u1, description="API de FI")
+
+    c1 = Contributor.objects.create(user=u1, project=p1, role="author")
+    c2 = Contributor.objects.create(user=u2, project=p1, role="contributor")
+   
+    # --- Création d'issues ---
+    i1 = Issue.objects.create(
+        title="Corriger bug d'affichage",
+        description="La page d’accueil plante quand on clique sur un bouton",
+        project=p1,
+        author=u1,
+        assignee=u2,
+        tag="bug",
+        priority="high",
+        status="to_do"
+    )
+
+    Comment.objects.create(text="Je regarde ça dès demain.", issue=i1, author=c2)
+    Comment.objects.create(text="Parfait, merci", issue=i1, author=c1)
+
 if __name__ == "__main__":
     run()
